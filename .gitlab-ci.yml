@@ -1,5 +1,5 @@
 include:
-  - project: 'redmic-project/gitlab-ci-templates'
+  - project: 'pedroetb-projects/gitlab-ci-templates'
     ref: master
     file: '/deployment.yml'
 
@@ -7,16 +7,11 @@ stages:
   - test
   - deploy
 
-variables:
-  DOCKER_IMAGE: docker:stable
-  DIND_IMAGE: docker:dind
-  STACK: metric
-  STATUS_CHECK_DELAY: 200
-  IMAGE_NAME: prom/prometheus
-  IMAGE_TAG: v2.8.0
-
 check-rules:
   stage: test
+  variables:
+    DOCKER_IMAGE: docker:stable
+    DIND_IMAGE: docker:dind
   image: ${DOCKER_IMAGE}
   services:
     - ${DIND_IMAGE}
@@ -24,10 +19,9 @@ check-rules:
     - ./check-rules.sh
 
 .deploy:
-  script:
-    - >
-      deploy.sh IMAGE_NAME=${IMAGE_NAME} IMAGE_TAG=${IMAGE_TAG} COMPOSE_FILE=${COMPOSE_FILE} UI_AUTH=${UI_AUTH}
-      PUBLIC_HOSTNAME=${PUBLIC_HOSTNAME} JOBS=${JOBS} STORAGE_TSDB_RETENTION_TIME=${STORAGE_TSDB_RETENTION_TIME}
-      STORAGE_TSDB_RETENTION_SIZE=${STORAGE_TSDB_RETENTION_SIZE}
+  variables:
+    STACK: metric
+    SERVICES_TO_CHECK: ${STACK}_${CI_PROJECT_NAME}
+    STATUS_CHECK_DELAY: 200
   environment:
-    url: https://${CI_PROJECT_NAME}.${PUBLIC_HOSTNAME}
+    url: https://${CI_PROJECT_NAME}.${DD_TRAEFIK_DOMAIN}

@@ -1,11 +1,20 @@
 #!/bin/sh
 
-for f in $(pwd)/deploy/rules/*.rules.yml
+DOCKER_IMAGE_NAME=${DOCKER_IMAGE_NAME:-dnanexus/promtool}
+DOCKER_IMAGE_TAG=${DOCKER_IMAGE_TAG:-2.9.2}
+
+rulesPath=$(pwd)/deploy/config/rules
+
+for f in ${rulesPath}/*.rules.yml
 do
-	if [ -e "$f" ]
+	if [ -e "${f}" ]
 	then
-		filename=$( basename "$f" )
-		docker run --rm -v $(pwd)/deploy/rules/:/tmp dnanexus/promtool:1.0 \
+		filename=$(basename "${f}")
+		docker run \
+			--name prometheus-rule-tester \
+			-v ${rulesPath}:/tmp \
+			--rm \
+			${DOCKER_IMAGE_NAME}:${DOCKER_IMAGE_TAG} \
 			check rules /tmp/${filename}
 	fi
 done
