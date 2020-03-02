@@ -45,6 +45,7 @@ services:
       update_config:
         delay: ${UPDATE_DELAY:-1m}
       labels:
+        traefik.enable: 'true'
         traefik.http.routers.prometheus.entrypoints: ${TRAEFIK_ENTRYPOINT:-https}
         traefik.http.routers.prometheus.tls.certresolver: ${TRAEFIK_CERTRESOLVER:-default}
         traefik.http.routers.prometheus.rule: Host(`${TRAEFIK_SUBDOMAIN:-prometheus}.${TRAEFIK_DOMAIN}`)
@@ -54,10 +55,10 @@ services:
       resources:
         limits:
           cpus: '${RESOURCES_LIMITS_CPUS:-0.5}'
-          memory: ${RESOURCES_LIMITS_MEMORY:-128M}
+          memory: ${RESOURCES_LIMITS_MEMORY:-256M}
         reservations:
           cpus: '${RESOURCES_RESERVATIONS_CPUS:-0.001}'
-          memory: ${RESOURCES_RESERVATIONS_MEMORY:-64M}
+          memory: ${RESOURCES_RESERVATIONS_MEMORY:-128M}
 
 networks:
   metric-net:
