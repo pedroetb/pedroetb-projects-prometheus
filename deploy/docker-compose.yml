@@ -1,4 +1,4 @@
-version: '3.7'
+version: '3.9'
 
 services:
   prometheus:
@@ -48,7 +48,6 @@ services:
       labels:
         traefik.enable: 'true'
         traefik.http.routers.prometheus.entrypoints: ${TRAEFIK_ENTRYPOINT:-https}
-        traefik.http.routers.prometheus.tls.certresolver: ${TRAEFIK_CERTRESOLVER:-default}
         traefik.http.routers.prometheus.rule: Host(`${TRAEFIK_SUBDOMAIN}.${TRAEFIK_DOMAIN}`)
         traefik.http.middlewares.prometheus-auth.basicauth.users: ${TRAEFIK_AUTH}
         traefik.http.routers.prometheus.middlewares: prometheus-auth
@@ -74,12 +73,12 @@ networks:
 
 volumes:
   data-vol:
-    name: ${DATA_VOL_NAME}
+    name: ${DATA_VOL_NAME:-prometheus-vol}
     driver: local
     driver_opts:
       type: ${VOL_TYPE}
       o: addr=${VOL_ADDR},${VOL_OPTS}
-      device: ${DATA_VOL_DEVICE}
+      device: ${DATA_VOL_DEVICE:-:/prometheus-vol/}
 
 configs:
   entrypoint-config:
