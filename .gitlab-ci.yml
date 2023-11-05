@@ -9,10 +9,10 @@ stages:
 
 check-rules:
   stage: test
+  image: ${DOCKER_IMAGE}
   variables:
     DOCKER_IMAGE: docker:stable
     DIND_IMAGE: docker:dind
-  image: ${DOCKER_IMAGE}
   services:
     - ${DIND_IMAGE}
   script:

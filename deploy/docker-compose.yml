@@ -46,7 +46,7 @@ services:
       update_config:
         delay: ${UPDATE_DELAY:-1m}
       labels:
-        traefik.enable: 'true'
+        traefik.enable: ${TRAEFIK_ENABLE:-true}
         traefik.http.routers.prometheus.entrypoints: ${TRAEFIK_ENTRYPOINT:-https}
         traefik.http.routers.prometheus.rule: Host(`${TRAEFIK_SUBDOMAIN}.${TRAEFIK_DOMAIN}`)
         traefik.http.middlewares.prometheus-auth.basicauth.users: ${TRAEFIK_AUTH}
@@ -91,12 +91,12 @@ configs:
 
   node-rules-config:
     name: ${NODE_RULES_CONFIG_NAME:-prometheus-node-rules}
-    file: ./config/rules/swarm_node.rules.yml
+    file: ./rules/swarm_node.rules.yml
 
   service-rules-config:
     name: ${SERVICE_RULES_CONFIG_NAME:-prometheus-service-rules}
-    file: ./config/rules/swarm_service.rules.yml
+    file: ./rules/swarm_service.rules.yml
 
   task-rules-config:
     name: ${TASK_RULES_CONFIG_NAME:-prometheus-task-rules}
-    file: ./config/rules/swarm_task.rules.yml
+    file: ./rules/swarm_task.rules.yml
