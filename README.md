@@ -1,5 +1,7 @@
 # Prometheus
 
+Collect metrics and define alert rules
+
 ## Adding services dynamically
 
 Set `JOBS` environment variable with a string of service scrape definitions, separated by `,`.
