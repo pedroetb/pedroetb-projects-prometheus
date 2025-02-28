@@ -56,10 +56,10 @@ services:
       resources:
         limits:
           cpus: '${RESOURCES_LIMITS_CPUS:-0.5}'
-          memory: ${RESOURCES_LIMITS_MEMORY:-512M}
+          memory: ${RESOURCES_LIMITS_MEMORY:-1G}
         reservations:
           cpus: '${RESOURCES_RESERVATIONS_CPUS:-0.001}'
-          memory: ${RESOURCES_RESERVATIONS_MEMORY:-256M}
+          memory: ${RESOURCES_RESERVATIONS_MEMORY:-512M}
 
 networks:
   metric-net:
@@ -75,6 +75,7 @@ networks:
 volumes:
   data-vol:
     name: ${DATA_VOL_NAME:-prometheus-vol}
+    driver: ${VOL_DRIVER:-local}
 
 configs:
   entrypoint-config:
