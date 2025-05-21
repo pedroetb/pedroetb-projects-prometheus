@@ -17,7 +17,7 @@ check-rules:
   stage: test
   image: ${DOCKER_IMAGE}
   variables:
-    DOCKER_IMAGE: docker:stable
+    DOCKER_IMAGE: docker:latest
     DIND_IMAGE: docker:dind
   services:
     - ${DIND_IMAGE}

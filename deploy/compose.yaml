@@ -31,7 +31,7 @@ services:
       - source: task-rules-config
         target: ${CONFIG_PATH}/task.rules.yml
     healthcheck:
-      test: wget --spider -q http://localhost:${PORT}
+      test: wget --spider -q http://127.0.0.1:${PORT}
       interval: ${HEALTHCHECK_INTERVAL:-1m}
       timeout: ${HEALTHCHECK_TIMEOUT:-30s}
       retries: ${HEALTHCHECK_RETRIES:-10}

@@ -1,26 +1,14 @@
 #!/bin/sh
 
+imageName=${PROMTOOL_IMAGE_NAME:-prom/prometheus}
+imageTag=${PROMTOOL_IMAGE_TAG:-latest}
+
 rulesPath=${PROMTOOL_RULES_PATH:-deploy/rules}
-imageName=${PROMTOOL_IMAGE_NAME:-dnanexus/promtool}
-imageTag=${PROMTOOL_IMAGE_TAG:-2.9.2}
+rulesFiles="$(cd ${rulesPath} && ls *.yml)"
 
-checkOutput=0
-
-for f in "$(pwd)/${rulesPath}/"*.yml
-do
-	if [ -e "${f}" ]
-	then
-		filename=$(basename "${f}")
-
-		if ! docker run --rm \
-			-v "$(pwd)/${rulesPath}:/mnt" \
-			"${imageName}:${imageTag}" \
-				check rules "/mnt/${filename}"
-		then
-			checkOutput=1
-			echo ""
-		fi
-	fi
-done
-
-exit "${checkOutput}"
+docker run --rm -q \
+	-v "$(pwd)/${rulesPath}:/mnt" \
+	-w "/mnt" \
+	--entrypoint "promtool" \
+	"${imageName}:${imageTag}" \
+		check rules ${rulesFiles}
