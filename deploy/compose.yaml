@@ -3,11 +3,13 @@ services:
     image: ${IMAGE_NAME:-prom/prometheus}:${IMAGE_TAG:-latest}
     entrypoint: ${CONFIG_PATH}/${ENTRYPOINT_FILENAME}
     command:
+      - --web.listen-address=:${PORT}
+      - --web.external-url=https://${TRAEFIK_SUBDOMAIN}.${TRAEFIK_DOMAIN}
+      - --log.level=${LOG_LEVEL:-info}
       - --config.file=${CONFIG_PATH}/${FINAL_CONFIG_FILENAME}
       - --storage.tsdb.path=${DATA_PATH}
       - --storage.tsdb.retention.time=${STORAGE_TSDB_RETENTION_TIME}
       - --storage.tsdb.retention.size=${STORAGE_TSDB_RETENTION_SIZE}
-      - --web.external-url=https://${TRAEFIK_SUBDOMAIN}.${TRAEFIK_DOMAIN}
     environment:
       CONFIG_PATH:
       INITIAL_CONFIG_FILENAME:
